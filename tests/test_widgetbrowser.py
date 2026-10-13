@@ -13,7 +13,7 @@ from pages.basic_page import BasicPage
 from pages.misc_page import MiscPage
 
 
-def test_widgetbrowser(page):
+def test_widgetbrowser(page, excel_data):
 
     # Create Page Objects
     form = FormPage(page)
@@ -31,8 +31,15 @@ def test_widgetbrowser(page):
     misc = MiscPage(page)
 
     # FORM
-    form.fill_required_field("Rahul")
-    form.fill_password("Test@123")
+    
+    for data in excel_data:
+     print(f"Testing username: {data['username']}")
+     form.fill_required_field(data["username"])
+     form.fill_password(data["password"])
+
+     assert form.required_field.input_value() == data["username"]
+     assert form.password_field.input_value() == data["password"]
+
 
     # COMBOBOX
     combo.select_item_9()
